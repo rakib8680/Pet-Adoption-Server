@@ -1,4 +1,6 @@
+import httpStatus from "http-status";
 import catchAsync from "../../../utils/catchAsync";
+import sendResponse from "../../../utils/sendResponse";
 import { UserServices } from "./user.service";
 
 
@@ -9,6 +11,17 @@ const registerUser = catchAsync(
         const payload = req.body;
         const result = UserServices.registerUser(payload);
 
-        
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.OK,
+            message:'User created successfully',
+            data:result
+        })
     }
 )
+
+
+
+export const UserControllers = {
+    registerUser
+}
