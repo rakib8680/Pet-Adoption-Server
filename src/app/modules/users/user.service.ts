@@ -1,11 +1,12 @@
 import prisma from "../../../utils/prisma";
-import { TUserPayload } from "./user.interfaces";
+import {TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
+
 
 
 // create user
 const registerUser = async (payload: TUserPayload) => {
-    
+
   // hash the password
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
@@ -23,6 +24,7 @@ const registerUser = async (payload: TUserPayload) => {
 
   return userData;
 };
+
 
 export const UserServices = {
   registerUser,
