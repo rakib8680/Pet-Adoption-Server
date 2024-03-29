@@ -5,14 +5,13 @@ import { UserServices } from "./user.service";
 
 // create user
 const registerUser = catchAsync(async (req, res) => {
-  
-    const payload = req.body;
-  const result =await UserServices.registerUser(payload);
+  const payload = req.body;
+  const result = await UserServices.registerUser(payload);
 
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.OK,
-    message: "User created successfully",
+    statusCode: httpStatus.CREATED,
+    message: "User registered successfully",
     data: result,
   });
 });
