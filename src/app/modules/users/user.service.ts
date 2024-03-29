@@ -3,18 +3,18 @@ import { TUserPayload } from "./user.interfaces";
 
 
 
-// create user 
-const registerUser  = async (payload:TUserPayload)=>{
+// create user
+const registerUser = async (payload: TUserPayload) => {
+  const result = await prisma.user.create({
+    data: payload,
+  });
 
-    // const result = await prisma.user.create({
-    //     data:
-    // })
-    console.log('user created successfully');
+  // remove the password from the result
+  const { password, ...userData } = result;
 
+  return userData;
 };
 
-
 export const UserServices = {
-registerUser
-}
-
+  registerUser,
+};

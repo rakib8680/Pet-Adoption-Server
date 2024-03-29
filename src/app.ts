@@ -7,8 +7,9 @@ const app: Application = express();
 
 
 
-// middlewares
+// middlewares and parsers
 app.use(cors());
+app.use(express.json());
 
 
 
