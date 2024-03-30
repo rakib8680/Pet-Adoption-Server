@@ -1,4 +1,5 @@
 import { AuthRoutes } from "../modules/auth/auth.routes";
+import { PetRoutes } from "../modules/pets/pet.routes";
 import { UserRoutes } from "../modules/users/user.routes";
 import express from "express";
 
@@ -12,6 +13,10 @@ const applicationRoutes = [
   {
     path: "",
     route: AuthRoutes,
+  },
+  {
+    path: "",
+    route: PetRoutes,
   },
 ];
 
