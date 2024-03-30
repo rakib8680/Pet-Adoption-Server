@@ -19,6 +19,8 @@ import jwt, { Secret } from "jsonwebtoken"
         if(!decodedData) throw new Error("Unauthorized Access");
 
 
+
+
         // set the user data to request object
         req.user = decodedData;
 
