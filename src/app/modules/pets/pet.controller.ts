@@ -21,7 +21,25 @@ const addPet = catchAsync(async (req, res) => {
 
 
 
+// get all pets 
+const getAllPets = catchAsync(async (req, res) => {
+
+
+    const result = await  PetServices.getAllPets(req.query);
+  
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Pets retrieved successfully",
+      data: result,
+    });
+  });
+
+
+
   export const PetControllers = {
-    addPet
+    addPet,
+    getAllPets
+
   }
   
