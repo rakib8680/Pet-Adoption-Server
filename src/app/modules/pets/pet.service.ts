@@ -18,9 +18,9 @@ const addPet = async (payload: TPet) => {
 
 
 // get all pets
-const getAllPets = async (params: any) => {
+const getAllPets = async (params: any, options:any) => {
 
-  // console.log(params);
+    const {page, limit,}
 
   const { searchTerm, age, ...filterableData } = params;
 
