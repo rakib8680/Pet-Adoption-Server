@@ -2,6 +2,8 @@ import { Request } from "express";
 import config from "../../config";
 import catchAsync from "../../utils/catchAsync"
 import jwt, { Secret } from "jsonwebtoken"
+import AppError from "../errors/AppError";
+import httpStatus from "http-status";
 
 
 
@@ -11,12 +13,12 @@ import jwt, { Secret } from "jsonwebtoken"
 
         // get the token from client
         const token = req.headers.authorization;
-        if(!token) throw new Error("Unauthorized Access");
+        if(!token) throw new AppError(httpStatus.UNAUTHORIZED,"Unauthorized Access");
 
 
         // verify the token
         const decodedData = jwt.verify(token, config.jwtAccessSecret as Secret);
-        if(!decodedData) throw new Error("Unauthorized Access");
+        if(!decodedData) throw new AppError(httpStatus.UNAUTHORIZED,"Unauthorized Access");
 
 
 
