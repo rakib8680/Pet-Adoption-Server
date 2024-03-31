@@ -18,6 +18,18 @@ const addPet = async (payload: TPet) => {
 // get all pets
 const getAllPets = async (params: any) => {
 
+    // console.log(params);
+
+    const {searchTerm ,age, ...filterableData}  = params;
+
+    //Convert age to integer if it exists in filterableData
+    if(filterableData.hasOwnProperty("age")){
+        filterableData['age'] = parseInt(filterableData['age']);
+    }
+
+
+
+    // searching 
   const andConditions: Prisma.PetWhereInput[] = [];
   if (params.searchTerm) {
     andConditions.push({
@@ -28,7 +40,30 @@ const getAllPets = async (params: any) => {
         },
       })),
     });
-  }
+  };
+
+
+
+//filtering 
+if(age){
+    andConditions.push({
+        age: {
+            equals: parseInt(age),
+        }
+    })
+};
+if(Object.keys(filterableData).length > 0){
+    andConditions.push({
+        AND: Object.keys(filterableData).map(field => ({
+            [field]:{
+                equals: filterableData[field],
+                mode: "insensitive"
+            }
+        }))
+    })
+};
+
+
 
   const whereConditions: Prisma.PetWhereInput = { AND: andConditions };
 
