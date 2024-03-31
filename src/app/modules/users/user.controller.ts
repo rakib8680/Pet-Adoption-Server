@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../../utils/catchAsync";
 import sendResponse from "../../../utils/sendResponse";
 import { UserServices } from "./user.service";
+import { Request } from "express";
 
 // create user
 const registerUser = catchAsync(async (req, res) => {
@@ -17,7 +18,24 @@ const registerUser = catchAsync(async (req, res) => {
 });
 
 
+
+// get a single user 
+const getSingleUser = catchAsync(async (req :  Request & {user?:any}, res) => {
+ 
+  const user = req.user;
+  const result = await UserServices.getSingleUser(user);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User profile retrieved successfully",
+    data: result,
+  });
+})
+
+
 export const UserControllers = {
   registerUser,
+  getSingleUser
 
 };
