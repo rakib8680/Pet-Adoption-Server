@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../../utils/prisma";
 import { petSearchableFields } from "./pet.constants";
+import { calculatePagination } from "../../../utils/calculatePagination";
 
 
 
@@ -18,12 +19,11 @@ const addPet = async (payload: TPet) => {
 
 
 // get all pets
-const getAllPets = async (params: any, options:any) => {
+const getAllPets = async (params: any, options: any) => {
 
-    const {page, limit,}
+  const { page, limit, skip, sortBy, sortOrder } = calculatePagination(options);
 
   const { searchTerm, age, ...filterableData } = params;
-
 
 
   //Convert age to integer if it exists in filterableData
@@ -33,7 +33,7 @@ const getAllPets = async (params: any, options:any) => {
 
 
 
-  // searching
+  // search filtering
   const andConditions: Prisma.PetWhereInput[] = [];
   if (params.searchTerm) {
     andConditions.push({
@@ -44,11 +44,11 @@ const getAllPets = async (params: any, options:any) => {
         },
       })),
     });
-  }
+  };
 
 
 
-  //filtering
+  //Solid filtering
   if (age) {
     andConditions.push({
       age: {
@@ -71,15 +71,29 @@ const getAllPets = async (params: any, options:any) => {
 
   const whereConditions: Prisma.PetWhereInput = { AND: andConditions };
 
+
+
+//   final result 
   const result = await prisma.pet.findMany({
     where: whereConditions,
+    skip,
+    take: limit,
+    orderBy: {
+      [sortBy]: sortOrder as Prisma.SortOrder,
+    },
   });
 
+const total = result.length;
 
-  return result;
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
 };
-
-
 
 
 

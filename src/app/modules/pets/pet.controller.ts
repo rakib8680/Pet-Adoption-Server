@@ -34,7 +34,8 @@ const getAllPets = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: "Pets retrieved successfully",
-    data: result,
+    meta:result.meta,
+    data: result.data,
   });
 });
 
