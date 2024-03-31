@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Pet, Prisma } from "@prisma/client";
 import prisma from "../../../utils/prisma";
 import { petSearchableFields } from "./pet.constants";
 import { calculatePagination } from "../../../utils/calculatePagination";
@@ -20,18 +20,14 @@ const addPet = async (payload: TPet) => {
 
 // get all pets
 const getAllPets = async (params: any, options: any) => {
-
   const { page, limit, skip, sortBy, sortOrder } = calculatePagination(options);
 
   const { searchTerm, age, ...filterableData } = params;
-
 
   //Convert age to integer if it exists in filterableData
   if (filterableData.hasOwnProperty("age")) {
     filterableData["age"] = parseInt(filterableData["age"]);
   }
-
-
 
   // search filtering
   const andConditions: Prisma.PetWhereInput[] = [];
@@ -44,9 +40,7 @@ const getAllPets = async (params: any, options: any) => {
         },
       })),
     });
-  };
-
-
+  }
 
   //Solid filtering
   if (age) {
@@ -67,13 +61,9 @@ const getAllPets = async (params: any, options: any) => {
     });
   }
 
-
-
   const whereConditions: Prisma.PetWhereInput = { AND: andConditions };
 
-
-
-//   final result 
+  //   final result
   const result = await prisma.pet.findMany({
     where: whereConditions,
     skip,
@@ -83,7 +73,7 @@ const getAllPets = async (params: any, options: any) => {
     },
   });
 
-const total = result.length;
+  const total = result.length;
 
   return {
     meta: {
@@ -97,7 +87,33 @@ const total = result.length;
 
 
 
+
+// update pet
+const updatePet = async (id: string, payload: Partial<Pet>): Promise<Pet> => {
+    
+  // check if pet exists
+  await prisma.pet.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  // update the pet
+  const result = await prisma.pet.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+
+
+
+
 export const PetServices = {
   addPet,
   getAllPets,
+  updatePet,
 };

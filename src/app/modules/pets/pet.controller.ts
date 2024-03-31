@@ -39,7 +39,30 @@ const getAllPets = catchAsync(async (req, res) => {
   });
 });
 
+
+
+// update pet 
+const updatePet = catchAsync(async (req, res) => {
+
+  const id = req.params.petId;
+  const payload = req.body;
+
+  const result = await PetServices.updatePet(id, payload);
+
+  
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Pet profile updated successfully",
+    data: result,
+  });
+
+});
+
+
+
 export const PetControllers = {
   addPet,
   getAllPets,
+  updatePet
 };
