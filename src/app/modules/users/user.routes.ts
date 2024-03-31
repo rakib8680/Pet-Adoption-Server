@@ -11,5 +11,7 @@ router.post("/register", UserControllers.registerUser);
 
 router.get('/profile',auth(), UserControllers.getSingleUser);
 
+router.put('/profile', auth(), UserControllers.updateUser)
+
 
 export const UserRoutes = router;

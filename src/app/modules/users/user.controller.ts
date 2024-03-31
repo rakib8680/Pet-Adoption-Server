@@ -31,11 +31,32 @@ const getSingleUser = catchAsync(async (req :  Request & {user?:any}, res) => {
     message: "User profile retrieved successfully",
     data: result,
   });
-})
+});
+
+
+
+
+// update user 
+const updateUser = catchAsync(async (req :  Request & {user?:any}, res) => {
+ 
+  const user = req.user;
+  const data = req.body;
+  const result = await UserServices.updateUser(user, data);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User profile updated successfully",
+    data: result,
+  });
+});
+
+
 
 
 export const UserControllers = {
   registerUser,
-  getSingleUser
+  getSingleUser,
+  updateUser
 
 };

@@ -1,7 +1,8 @@
-import { JwtPayload } from "jsonwebtoken";
+import { Jwt, JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
+import { User } from "@prisma/client";
 
 
 
@@ -27,7 +28,6 @@ const registerUser = async (payload: TUserPayload) => {
 
 
 
-
 // get a single user
 const getSingleUser = async (payload: JwtPayload) => {
   const userData = await prisma.user.findUniqueOrThrow({
@@ -44,7 +44,25 @@ const getSingleUser = async (payload: JwtPayload) => {
 
 
 
+// update user information
+const updateUser = async (payload: JwtPayload, data: Partial<User>) => {
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: payload.id,
+    },
+    data,
+  });
+
+  // remove the password from the result
+  const { password, ...result } = updatedUser;
+
+  return result;
+};
+
+
+
 export const UserServices = {
   registerUser,
   getSingleUser,
+  updateUser,
 };
