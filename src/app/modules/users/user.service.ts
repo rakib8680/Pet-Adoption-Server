@@ -3,11 +3,26 @@ import prisma from "../../../utils/prisma";
 import { TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
 import { User } from "@prisma/client";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 
 
 // create user
 const registerUser = async (payload: TUserPayload) => {
+
+  // check if the user already exists
+  const userExists = await prisma.user.findFirst({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if (userExists) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User already exists");
+  }
+
+
   // hash the password
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
@@ -16,17 +31,19 @@ const registerUser = async (payload: TUserPayload) => {
     password: hashedPassword,
   };
 
+
   const result = await prisma.user.create({
     data: userPayload,
   });
+
+
+
 
   // remove the password from the result
   const { password, ...userData } = result;
 
   return userData;
 };
-
-
 
 // get a single user
 const getSingleUser = async (payload: JwtPayload) => {
@@ -41,7 +58,6 @@ const getSingleUser = async (payload: JwtPayload) => {
 
   return result;
 };
-
 
 
 // update user information
