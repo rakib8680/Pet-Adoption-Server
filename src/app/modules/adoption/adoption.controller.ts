@@ -15,8 +15,24 @@ const submitAdoptionRequest = catchAsync(
 
     sendResponse(res, {
       success: true,
-      statusCode: httpStatus.OK,
+      statusCode: httpStatus.CREATED,
       message: "Adoption request submitted successfully",
+      data: result,
+    });
+  }
+);
+
+
+
+// get all requests 
+const getAllRequests = catchAsync(async (req, res) => {
+
+    const result = await AdoptionServices.getAllRequests();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Adoption requests retrieved successfully",
       data: result,
     });
   }
@@ -24,4 +40,5 @@ const submitAdoptionRequest = catchAsync(
 
 export const AdoptionControllers = {
   submitAdoptionRequest,
+    getAllRequests
 };

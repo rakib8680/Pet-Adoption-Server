@@ -36,6 +36,18 @@ const submitAdoptionRequest = async (
 
 
 
+// get all requests 
+const getAllRequests = async () =>{
+
+    const result = await prisma.adoptionRequest.findMany();
+
+    return result;
+
+}
+
+
+
 export const AdoptionServices = {
   submitAdoptionRequest,
+    getAllRequests
 };
