@@ -13,7 +13,7 @@ router.post("/register",validateRequest(userValidations.createUserValidationSche
 
 router.get('/profile',auth(), UserControllers.getSingleUser);
 
-router.put('/profile', auth(), UserControllers.updateUser)
+router.put('/profile', auth(),validateRequest(userValidations.updateUserValidationSchema), UserControllers.updateUser)
 
 
 export const UserRoutes = router;

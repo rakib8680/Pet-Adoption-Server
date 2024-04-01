@@ -10,7 +10,17 @@ const createUserValidationSchema = z.object({
 
 
 
+const updateUserValidationSchema= createUserValidationSchema.partial();
+
+
+const loginValidationSchema = z.object({
+    email:z.string({required_error:"Email is required"}).email({message:"Email must be a valid email address."}),
+    password:z.string({required_error:"Password is required"})
+})
+
 
 export const userValidations = {
-    createUserValidationSchema
+    createUserValidationSchema,
+    updateUserValidationSchema,
+    loginValidationSchema
 }
