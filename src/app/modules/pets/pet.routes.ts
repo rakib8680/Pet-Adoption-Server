@@ -16,6 +16,11 @@ router.post(
 
 router.get("/pets", PetControllers.getAllPets);
 
-router.put("/pets/:petId", auth(), PetControllers.updatePet);
+router.put(
+  "/pets/:petId",
+  auth(),
+  validateRequest(petValidations.updatePetValidationSchema),
+  PetControllers.updatePet
+);
 
 export const PetRoutes = router;
