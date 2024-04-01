@@ -1,3 +1,4 @@
+import { AdoptionRoutes } from "../modules/adoption/adoption.routes";
 import { AuthRoutes } from "../modules/auth/auth.routes";
 import { PetRoutes } from "../modules/pets/pet.routes";
 import { UserRoutes } from "../modules/users/user.routes";
@@ -18,6 +19,10 @@ const applicationRoutes = [
     path: "",
     route: PetRoutes,
   },
+  {
+    path: "",
+    route: AdoptionRoutes,
+  }
 ];
 
 applicationRoutes.forEach((route) => router.use(route.path, route.route));
