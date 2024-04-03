@@ -1,6 +1,10 @@
 # 🐾 Pet Adoption Platform 🐾
 
-Welcome to the **Pet Adoption Platform**! Our mission is to connect adorable pets with loving homes. This platform is designed to make the process of finding your perfect pet match as easy and enjoyable as possible.
+🔗 **Live Project**: [Pet Adoption Platform](https://pet-adoption-server-new.vercel.app/)
+
+## 📝 Project Overview
+
+Welcome to the **Pet Adoption Platform**! Our mission is to connect adorable pets with loving homes. This platform is designed to make the process of finding your perfect pet match as easy and enjoyable as possible. Whether you're looking to adopt a pet or add one for adoption, we've got you covered!
 
 ## 🚀 Features
 
