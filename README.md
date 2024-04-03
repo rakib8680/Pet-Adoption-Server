@@ -67,8 +67,9 @@ To run this project, you will need to add the following environment variables to
 ⏳ JWT_EXPIRES_IN=your_jwt_expiration_time
 🌐 NODE_ENV=your_node_environment
 
-Each of these variables plays a crucial role in the configuration of your application. Make sure to keep them safe!
 ```
+
+Each of these variables plays a crucial role in the configuration of your application. Make sure to keep them safe!
 
 # 🛠️ Tech Stack
 
