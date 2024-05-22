@@ -40,7 +40,7 @@ const getAllPets = async (params: any, options: any) => {
         },
       })),
     });
-  }
+  };
 
   //Solid filtering
   if (age) {
@@ -72,6 +72,8 @@ const getAllPets = async (params: any, options: any) => {
       [sortBy]: sortOrder as Prisma.SortOrder,
     },
   });
+
+
 
   const total = result.length;
 
