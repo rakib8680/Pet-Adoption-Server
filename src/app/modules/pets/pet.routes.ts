@@ -17,6 +17,8 @@ router.post(
 
 router.get("/pets", PetControllers.getAllPets);
 
+router.get("/pets/:petId",PetControllers.getSinglePet)
+
 router.put(
   "/pets/:petId",
   auth(USER_ROLE.ADMIN),
