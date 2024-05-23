@@ -1,4 +1,4 @@
-import { Gender, Pet, Prisma } from "@prisma/client";
+import { Pet, Prisma } from "@prisma/client";
 import prisma from "../../../utils/prisma";
 import { petSearchableFields } from "./pet.constants";
 import { calculatePagination } from "../../../utils/calculatePagination";
@@ -31,8 +31,9 @@ const getAllPets = async (params: any, options: any) => {
   };
 
 
-  // search filtering
   const andConditions: Prisma.PetWhereInput[] = [];
+
+  // search filtering
   if (params.searchTerm) {
     andConditions.push({
       OR: petSearchableFields.map((field) => ({
@@ -64,6 +65,7 @@ const getAllPets = async (params: any, options: any) => {
 
   const whereConditions: Prisma.PetWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
 
+  // console.log(whereConditions.AND[0].OR);
   //   final result
   const result = await prisma.pet.findMany({
     where: whereConditions,
@@ -87,6 +89,21 @@ const getAllPets = async (params: any, options: any) => {
     data: result,
   };
 };
+
+
+
+// get single get 
+const getSinglePet = async(id:string)=>{
+
+  const result  = await prisma.pet.findUniqueOrThrow({
+    where:{
+      id
+    }
+  });
+
+return result;
+
+}
 
 
 
@@ -119,4 +136,5 @@ export const PetServices = {
   addPet,
   getAllPets,
   updatePet,
+  getSinglePet
 };

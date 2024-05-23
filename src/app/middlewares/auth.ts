@@ -1,9 +1,10 @@
 import { Request } from "express";
 import config from "../../config";
 import catchAsync from "../../utils/catchAsync"
-import jwt, { Secret } from "jsonwebtoken"
+import jwt, { JwtPayload, Secret } from "jsonwebtoken"
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
+import { verifyToken } from "../../utils/jwtHelpers";
 
 
 
@@ -17,10 +18,14 @@ import httpStatus from "http-status";
 
 
         // verify the token
-        const decodedData = jwt.verify(token, config.jwtAccessSecret as Secret);
+        const decodedData = verifyToken(token, config.jwtAccessSecret as Secret);
         if(!decodedData) throw new AppError(httpStatus.UNAUTHORIZED,"Unauthorized Access");
 
 
+        // check if the user role is allowed to access the route
+        if(roles.length && !roles.includes(decodedData.role)){
+            throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized");
+        }
 
 
         // set the user data to request object
