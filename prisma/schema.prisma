@@ -12,12 +12,13 @@ model User {
   id              String            @id @default(uuid())
   name            String
   email           String            @unique
-  gender          Gender
-  profilePicture  String
-  age             Int
-  location        String
-  contactNumber   String
+  gender          Gender?
+  profilePicture  String?
+  age             Int?
+  location        String?
+  contactNumber   String?
   role            USER_ROLE         @default(USER)
+  status          UserStatus        @default(ACTIVE)
   password        String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -53,6 +54,9 @@ model Pet {
 model AdoptionRequest {
   id                     String                @id @default(uuid())
   userId                 String
+  userName               String
+  userEmail              String?
+  userContactNumber      String?
   petId                  String
   status                 AdoptionRequestStatus @default(PENDING)
   petOwnershipExperience String
@@ -84,4 +88,9 @@ enum HealthStatus {
 enum USER_ROLE {
   ADMIN
   USER
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
 }

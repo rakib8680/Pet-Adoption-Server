@@ -1,4 +1,4 @@
-import { Jwt, JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
@@ -10,6 +10,7 @@ import httpStatus from "http-status";
 
 // create user
 const registerUser = async (payload: TUserPayload) => {
+
 
   // check if the user already exists
   const userExists = await prisma.user.findFirst({
@@ -35,7 +36,6 @@ const registerUser = async (payload: TUserPayload) => {
   const result = await prisma.user.create({
     data: userPayload,
   });
-
 
 
 
