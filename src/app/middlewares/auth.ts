@@ -27,7 +27,6 @@ import httpStatus from "http-status";
         req.user = decodedData;
 
 
-
         next();
 
 
