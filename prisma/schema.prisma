@@ -34,7 +34,7 @@ model Pet {
   species              String
   photos               String[]
   gender               Gender
-  HealthStatus         HealthStatus      @default(HEALTHY)
+  healthStatus         HealthStatus      @default(HEALTHY)
   breed                String
   age                  Int
   size                 String
@@ -42,6 +42,7 @@ model Pet {
   description          String
   temperament          String
   medicalHistory       String
+  specialNeeds         String            @default("None")
   adoptionRequirements String
   createdAt            DateTime          @default(now())
   updatedAt            DateTime          @updatedAt

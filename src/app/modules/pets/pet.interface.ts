@@ -1,11 +1,15 @@
+import { Gender, HealthStatus } from "@prisma/client"
 
 
 
-type TPet = {
+export type TPet = {
     name: string
     species: string
     breed: string
     age: number
+    photos: string[]
+    gender:Gender
+    healthStatus: HealthStatus
     size: string
     location: string
     description: string

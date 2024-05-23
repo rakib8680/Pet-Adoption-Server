@@ -1,7 +1,8 @@
-import { Pet, Prisma } from "@prisma/client";
+import { Gender, Pet, Prisma } from "@prisma/client";
 import prisma from "../../../utils/prisma";
 import { petSearchableFields } from "./pet.constants";
 import { calculatePagination } from "../../../utils/calculatePagination";
+import { TPet } from "./pet.interface";
 
 
 
@@ -27,7 +28,8 @@ const getAllPets = async (params: any, options: any) => {
   //Convert age to integer if it exists in filterableData
   if (filterableData.hasOwnProperty("age")) {
     filterableData["age"] = parseInt(filterableData["age"]);
-  }
+  };
+
 
   // search filtering
   const andConditions: Prisma.PetWhereInput[] = [];
@@ -55,13 +57,12 @@ const getAllPets = async (params: any, options: any) => {
       AND: Object.keys(filterableData).map((field) => ({
         [field]: {
           equals: filterableData[field],
-          mode: "insensitive",
         },
       })),
     });
   }
 
-  const whereConditions: Prisma.PetWhereInput = { AND: andConditions };
+  const whereConditions: Prisma.PetWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
 
   //   final result
   const result = await prisma.pet.findMany({

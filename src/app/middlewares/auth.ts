@@ -7,7 +7,7 @@ import httpStatus from "http-status";
 
 
 
- const auth  = ()=>{
+ const auth  = (...roles:string[])=>{
      
     return catchAsync(async(req :  Request & {user?:any},res,next)=>{
 
