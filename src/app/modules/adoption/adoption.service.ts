@@ -2,6 +2,8 @@ import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { AdoptionRequestStatus } from "@prisma/client";
 import { TAdoptionRequest } from "./adoption.interfaces";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 
 
@@ -10,9 +12,7 @@ const submitAdoptionRequest = async (
   payload: TAdoptionRequest,
   user: JwtPayload
 ) => {
-
-
-  const {petId, ...rest} = payload;
+  const { petId, ...rest } = payload;
 
   // check if pet exists
   const pet = await prisma.pet.findUniqueOrThrow({
@@ -21,10 +21,24 @@ const submitAdoptionRequest = async (
     },
   });
 
+  // check if request is already submitted
+  const existingRequest = await prisma.adoptionRequest.findFirst({
+    where: {
+      userId: user.id,
+      petId,
+    },
+  });
+  if (existingRequest) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You have already submitted a request for this pet"
+    );
+  }
+
   const adoptionData = {
     userId: user.id,
     petId: pet.id,
-    ...rest
+    ...rest,
   };
 
   const result = await prisma.adoptionRequest.create({
@@ -35,6 +49,7 @@ const submitAdoptionRequest = async (
 };
 
 
+
 // get all requests
 const getAllRequests = async () => {
   const result = await prisma.adoptionRequest.findMany();
@@ -43,34 +58,63 @@ const getAllRequests = async () => {
 };
 
 
-// get my  requests 
-const getMyAdoptedPetRequests = async (user:JwtPayload, status:AdoptionRequestStatus)=>{
 
+// get my  requests
+const getMyAdoptedPetRequests = async (
+  user: JwtPayload,
+  status: AdoptionRequestStatus
+) => {
   let result = null;
 
-  if(status === AdoptionRequestStatus.APPROVED){
+  if (status === AdoptionRequestStatus.APPROVED) {
     result = await prisma.adoptionRequest.findMany({
-      where:{
+      where: {
         userId: user.id,
-        status: AdoptionRequestStatus.APPROVED
+        status: AdoptionRequestStatus.APPROVED,
       },
-      include:{
-        pet:true
-      }
+      include: {
+        pet: true,
+      },
     });
-  }else{
+  } else {
     result = await prisma.adoptionRequest.findMany({
-      where:{
+      where: {
         userId: user.id,
         status: {
-          not: AdoptionRequestStatus.APPROVED
-        }
-      }
+          not: AdoptionRequestStatus.APPROVED,
+        },
+      },
     });
   }
-    
-    return result;
-}
+
+  return result;
+};
+
+
+
+// delete my adoption request
+const deleteMyAdoptionRequest = async (user: JwtPayload, id: string) => {
+
+  // check if request exists
+  const adoptionRequest = await prisma.adoptionRequest.findUniqueOrThrow({
+    where: { id },
+  });
+
+  // check if user is the owner of the request
+  if (adoptionRequest.userId !== user?.id) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "You are not authorized to delete this request"
+    );
+  }
+
+   await prisma.adoptionRequest.delete({
+    where: { id },
+  });
+
+  return { message: "Adoption request deleted successfully" };
+};
+
 
 
 // update adoption request status
@@ -78,7 +122,6 @@ const updateAdoptionStatus = async (
   status: AdoptionRequestStatus,
   id: string
 ) => {
-
   // check if request exists
   const adoptionRequest = await prisma.adoptionRequest.findUniqueOrThrow({
     where: {
@@ -92,16 +135,19 @@ const updateAdoptionStatus = async (
     },
     data: {
       status,
-    }
+    },
   });
 
   return result;
 };
 
 
+
+
 export const AdoptionServices = {
   submitAdoptionRequest,
   getAllRequests,
   updateAdoptionStatus,
-  getMyAdoptedPetRequests
+  getMyAdoptedPetRequests,
+  deleteMyAdoptionRequest,
 };

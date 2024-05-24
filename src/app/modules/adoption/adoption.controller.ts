@@ -74,10 +74,28 @@ const updateAdoptionStatus = catchAsync(async (req, res) => {
 });
 
 
+// delete my adoption request
+const deleteMyAdoptionRequest = catchAsync(async (req: Request & { user?: any }, res) => {
+
+  const user = req.user;
+  const id = req.params.requestId;
+
+  const result = await AdoptionServices.deleteMyAdoptionRequest(user, id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Adoption request deleted successfully",
+    data: result,
+})
+
+})
+
 
 export const AdoptionControllers = {
   submitAdoptionRequest,
   getAllRequests,
   updateAdoptionStatus,
-  getMyAdoptedPetRequests
+  getMyAdoptedPetRequests,
+  deleteMyAdoptionRequest
 };

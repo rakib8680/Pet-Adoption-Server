@@ -31,4 +31,7 @@ router.put(
 );
 
 
+router.delete('/my-adoption-requests/:requestId', auth(USER_ROLE.USER), AdoptionControllers.deleteMyAdoptionRequest)
+
+
 export const AdoptionRoutes = router;
