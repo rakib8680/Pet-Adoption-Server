@@ -3,6 +3,8 @@ import catchAsync from "../../../utils/catchAsync";
 import sendResponse from "../../../utils/sendResponse";
 import { UserServices } from "./user.service";
 import { Request } from "express";
+import pick from "../../../utils/pick";
+import { userFilterableFields } from "./user.constants";
 
 
 
@@ -19,6 +21,23 @@ const registerUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+
+// get all users
+const getAllUsers = catchAsync(async (req, res) => {
+
+  const filters = pick(req.query, userFilterableFields);
+  const options = pick(req.query, ["sortBy", "limit", "page", "sortOrder"])
+
+  const result = await UserServices.getAllUsers(filters, options);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Users retrieved successfully",
+    data: result,
+  });
+})
 
 
 
@@ -93,4 +112,5 @@ export const UserControllers = {
   updateMyProfile,
   getSingleUser,
   updateUser,
+  getAllUsers
 };

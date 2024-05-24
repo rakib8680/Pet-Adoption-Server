@@ -13,6 +13,9 @@ router.post(
   UserControllers.registerUser
 );
 
+
+router.get("/users", auth(USER_ROLE.ADMIN), UserControllers.getAllUsers);
+
 router.get(
   "/profile",
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),

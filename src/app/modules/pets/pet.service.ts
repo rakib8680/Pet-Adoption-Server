@@ -45,6 +45,8 @@ const getAllPets = async (params: any, options: any) => {
     });
   };
 
+
+
   //Solid filtering
   if (age) {
     andConditions.push({
@@ -52,7 +54,8 @@ const getAllPets = async (params: any, options: any) => {
         equals: parseInt(age),
       },
     });
-  }
+  };
+
   if (Object.keys(filterableData).length > 0) {
     andConditions.push({
       AND: Object.keys(filterableData).map((field) => ({
@@ -63,9 +66,11 @@ const getAllPets = async (params: any, options: any) => {
     });
   }
 
+
   const whereConditions: Prisma.PetWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
 
   // console.log(whereConditions.AND[0].OR);
+  
   //   final result
   const result = await prisma.pet.findMany({
     where: whereConditions,

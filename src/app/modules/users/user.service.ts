@@ -2,9 +2,11 @@ import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
-import { User, UserStatus } from "@prisma/client";
+import { Prisma, User, UserStatus } from "@prisma/client";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
+import { calculatePagination } from "../../../utils/calculatePagination";
+import { userSearchableFields } from "./user.constants";
 
 
 
@@ -44,6 +46,72 @@ const registerUser = async (payload: TUserPayload) => {
 
   return userData;
 };
+
+
+
+
+
+// get all users 
+const getAllUsers = async (params:any, options:any) =>{
+
+  const { page, limit, skip, sortBy, sortOrder} = calculatePagination(options)
+  const { searchTerm, age, ...filterableData } = params;
+  // convert age to integer if it exists in filterableData
+  if(filterableData.hasOwnProperty("age")){
+    filterableData["age"] = parseInt(filterableData["age"]);
+  };
+
+
+  const andConditions:Prisma.UserWhereInput[] = [];
+
+
+  // searching 
+  if(params.searchTerm){
+    andConditions.push({
+      OR:userSearchableFields.map(field=>({
+        [field]:{
+          contains:params.searchTerm,
+          mode:"insensitive"
+        }
+      }))
+    })
+  };
+
+
+
+  // solid filtering
+  if(age){
+    andConditions.push({
+      age:{
+        equals:parseInt(age)
+      }
+    })
+  };
+
+  if(Object.keys(filterableData).length>0){
+    andConditions.push({
+      AND: Object.keys(filterableData).map(field =>({
+        [field]:{
+          equals:filterableData[field]
+        }
+      }))
+    })
+  };
+
+
+  const whereConditions:Prisma.UserWhereInput = andConditions.length> 0 ? {AND: andConditions}: {};
+
+
+  // final result 
+
+  const result = await prisma.user.findMany();
+  return result;
+
+}
+
+
+
+
 
 
 // get a single user
@@ -115,5 +183,6 @@ export const UserServices = {
   getMyProfile,
   updateMyProfile,
   getSingleUser,
-  updateUser
+  updateUser,
+  getAllUsers
 };
