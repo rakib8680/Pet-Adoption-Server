@@ -2,7 +2,7 @@ import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { TUserPayload } from "./user.interfaces";
 import bcrypt from "bcrypt";
-import { User } from "@prisma/client";
+import { User, UserStatus } from "@prisma/client";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
 
@@ -54,6 +54,24 @@ const getSingleUser = async (id:string)=>{
 
 
   return user;
+};
+
+
+// update a user 
+const updateUser = async(id:string, data:Partial<User>) =>{
+
+  // check if the user exists
+  await prisma.user.findUniqueOrThrow({
+    where:{id}})
+  
+    const updatedUser = await prisma.user.update({
+      where:{id},
+      data
+    });
+
+
+    return updatedUser;
+
 }
 
 
@@ -63,6 +81,7 @@ const getMyProfile = async (user: JwtPayload) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       id: user.id,
+      status: UserStatus.ACTIVE
     },
   });
 
@@ -73,11 +92,12 @@ const getMyProfile = async (user: JwtPayload) => {
 };
 
 
-// update user information
-const updateUser = async (payload: JwtPayload, data: Partial<User>) => {
+// update my profile
+const updateMyProfile = async (payload: JwtPayload, data: Partial<User>) => {
   const updatedUser = await prisma.user.update({
     where: {
       id: payload.id,
+      status: UserStatus.ACTIVE
     },
     data,
   });
@@ -93,6 +113,7 @@ const updateUser = async (payload: JwtPayload, data: Partial<User>) => {
 export const UserServices = {
   registerUser,
   getMyProfile,
-  updateUser,
-  getSingleUser
+  updateMyProfile,
+  getSingleUser,
+  updateUser
 };
