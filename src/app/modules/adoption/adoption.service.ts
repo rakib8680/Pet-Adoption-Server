@@ -21,7 +21,23 @@ const submitAdoptionRequest = async (
     },
   });
 
-  // check if request is already submitted
+
+  // check if the pet is already adopted
+  const isAdopted = await prisma.adoptionRequest.findFirst({
+    where: {
+      petId,
+      status: AdoptionRequestStatus.APPROVED,
+    },
+  });
+  if(isAdopted) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This pet is already adopted"
+    );
+  }
+
+  
+  // check if my request is already submitted
   const existingRequest = await prisma.adoptionRequest.findFirst({
     where: {
       userId: user.id,
