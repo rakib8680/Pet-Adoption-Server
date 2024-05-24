@@ -17,6 +17,24 @@ const addPet = async (payload: TPet) => {
 };
 
 
+// delete a pet 
+const deletePet = async (id:string)=>{
+  
+  // check if pet exists
+  await prisma.pet.findUniqueOrThrow({
+    where:{
+      id
+    }
+  })
+
+   await prisma.pet.delete({
+    where:{
+      id
+    }
+  });
+
+  return {message:"Pet deleted successfully"};
+}
 
 
 // get all pets
@@ -70,7 +88,7 @@ const getAllPets = async (params: any, options: any) => {
   const whereConditions: Prisma.PetWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
 
   // console.log(whereConditions.AND[0].OR);
-  
+
   //   final result
   const result = await prisma.pet.findMany({
     where: whereConditions,
@@ -112,7 +130,6 @@ return result;
 
 
 
-
 // update pet
 const updatePet = async (id: string, payload: Partial<Pet>): Promise<Pet> => {
     
@@ -141,5 +158,6 @@ export const PetServices = {
   addPet,
   getAllPets,
   updatePet,
-  getSinglePet
+  getSinglePet,
+  deletePet
 };

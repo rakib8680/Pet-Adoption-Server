@@ -50,7 +50,6 @@ const registerUser = async (payload: TUserPayload) => {
 
 
 
-
 // get all users 
 const getAllUsers = async (params:any, options:any) =>{
 
@@ -126,8 +125,6 @@ const getAllUsers = async (params:any, options:any) =>{
   };
 
 }
-
-
 
 
 

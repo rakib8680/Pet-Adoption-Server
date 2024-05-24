@@ -19,6 +19,8 @@ router.get("/pets", PetControllers.getAllPets);
 
 router.get("/pets/:petId",auth(USER_ROLE.USER, USER_ROLE.ADMIN),PetControllers.getSinglePet)
 
+router.delete("/pets/:petId", auth(USER_ROLE.ADMIN), PetControllers.deletePet);
+
 router.put(
   "/pets/:petId",
   auth(USER_ROLE.ADMIN),

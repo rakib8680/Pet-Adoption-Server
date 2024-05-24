@@ -22,6 +22,19 @@ const addPet = catchAsync(async (req, res) => {
 });
 
 
+// delete a pet 
+const deletePet = catchAsync(async (req, res) => {
+  const id = req.params.petId;
+  const result = await PetServices.deletePet(id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Pet deleted successfully",
+    data: result,
+  });
+})
+
 
 // get all pets
 const getAllPets = catchAsync(async (req, res) => {
@@ -79,5 +92,6 @@ export const PetControllers = {
   addPet,
   getAllPets,
   updatePet,
-  getSinglePet
+  getSinglePet,
+  deletePet
 };

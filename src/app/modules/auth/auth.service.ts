@@ -17,6 +17,7 @@ const loginUser = async (payload: TLoginPayload) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       email: payload.email,
+      status:UserStatus.ACTIVE
     },
   });
 
@@ -47,8 +48,6 @@ const loginUser = async (payload: TLoginPayload) => {
     accessToken,
   };
 };
-
-
 
 
 
