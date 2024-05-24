@@ -1,11 +1,8 @@
 import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../../utils/prisma";
 import { AdoptionRequestStatus } from "@prisma/client";
+import { TAdoptionRequest } from "./adoption.interfaces";
 
-type TAdoptionRequest = {
-  petId: string;
-  petOwnershipExperience: string;
-};
 
 
 // submit an adoption request
@@ -13,17 +10,21 @@ const submitAdoptionRequest = async (
   payload: TAdoptionRequest,
   user: JwtPayload
 ) => {
+
+
+  const {petId, ...rest} = payload;
+
   // check if pet exists
   const pet = await prisma.pet.findUniqueOrThrow({
     where: {
-      id: payload.petId,
+      id: petId,
     },
   });
 
   const adoptionData = {
     userId: user.id,
     petId: pet.id,
-    petOwnershipExperience: payload.petOwnershipExperience,
+    ...rest
   };
 
   const result = await prisma.adoptionRequest.create({
@@ -61,7 +62,7 @@ const updateAdoptionStatus = async (
     },
     data: {
       status,
-    },
+    }
   });
 
   return result;

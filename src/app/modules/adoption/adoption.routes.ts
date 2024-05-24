@@ -6,6 +6,7 @@ import {
   submitAdoptionValidationSchema,
   updateAdoptionStatusValidationSchema,
 } from "./adoption.validation";
+import { USER_ROLE } from "@prisma/client";
 
 
 const router = express.Router();
@@ -13,16 +14,16 @@ const router = express.Router();
 
 router.post(
   "/adoption-request",
-  auth(),
+  auth(USER_ROLE.USER),
   validateRequest(submitAdoptionValidationSchema),
   AdoptionControllers.submitAdoptionRequest
 );
 
-router.get("/adoption-requests", auth(), AdoptionControllers.getAllRequests);
+router.get("/adoption-requests", auth(USER_ROLE.ADMIN), AdoptionControllers.getAllRequests);
 
 router.put(
   "/adoption-requests/:requestId",
-  auth(),
+  auth(USER_ROLE.ADMIN),
   validateRequest(updateAdoptionStatusValidationSchema),
   AdoptionControllers.updateAdoptionStatus
 );
