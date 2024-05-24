@@ -45,11 +45,24 @@ const registerUser = async (payload: TUserPayload) => {
   return userData;
 };
 
+
 // get a single user
-const getSingleUser = async (payload: JwtPayload) => {
+const getSingleUser = async (id:string)=>{
+  const user = await prisma.user.findUniqueOrThrow({
+    where:{id}
+  });
+
+
+  return user;
+}
+
+
+
+// get my profile 
+const getMyProfile = async (user: JwtPayload) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
-      id: payload.id,
+      id: user.id,
     },
   });
 
@@ -79,6 +92,7 @@ const updateUser = async (payload: JwtPayload, data: Partial<User>) => {
 
 export const UserServices = {
   registerUser,
-  getSingleUser,
+  getMyProfile,
   updateUser,
+  getSingleUser
 };

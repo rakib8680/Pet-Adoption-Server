@@ -20,10 +20,27 @@ const registerUser = catchAsync(async (req, res) => {
 
 
 // get a single user 
-const getSingleUser = catchAsync(async (req :  Request & {user?:any}, res) => {
+const getSingleUser = catchAsync(async (req,res) =>{
+
+  const id = req.params.id;
+  const result = await UserServices.getSingleUser(id)
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User information retrieved successfully",
+    data: result,
+  });
+
+})
+
+
+
+// get my profile 
+const getMyProfile = catchAsync(async (req :  Request & {user?:any}, res) => {
  
   const user = req.user;
-  const result = await UserServices.getSingleUser(user);
+  const result = await UserServices.getMyProfile(user);
 
   sendResponse(res, {
     success: true,
@@ -56,7 +73,8 @@ const updateUser = catchAsync(async (req :  Request & {user?:any}, res) => {
 
 export const UserControllers = {
   registerUser,
-  getSingleUser,
-  updateUser
+  getMyProfile,
+  updateUser,
+  getSingleUser
 
 };
