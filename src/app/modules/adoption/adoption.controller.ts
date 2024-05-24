@@ -3,6 +3,7 @@ import catchAsync from "../../../utils/catchAsync";
 import { AdoptionServices } from "./adoption.service";
 import sendResponse from "../../../utils/sendResponse";
 import httpStatus from "http-status";
+import { AdoptionRequestStatus } from "@prisma/client";
 
 
 
@@ -39,6 +40,24 @@ const getAllRequests = catchAsync(async (req, res) => {
 });
 
 
+// get my adopted pet requests
+const getMyAdoptedPetRequests = catchAsync(async (req: Request & {user?:any}, res) => {
+
+  const user = req.user;
+  const status = req.query.status;
+
+  const result = await AdoptionServices.getMyAdoptedPetRequests(user, status as AdoptionRequestStatus);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "My adopted pet requests retrieved successfully",
+    data: result,
+  });
+
+})
+
+
 // update adoption request status
 const updateAdoptionStatus = catchAsync(async (req, res) => {
   const id = req.params.requestId;
@@ -60,4 +79,5 @@ export const AdoptionControllers = {
   submitAdoptionRequest,
   getAllRequests,
   updateAdoptionStatus,
+  getMyAdoptedPetRequests
 };

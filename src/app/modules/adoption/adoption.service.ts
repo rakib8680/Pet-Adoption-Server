@@ -43,6 +43,36 @@ const getAllRequests = async () => {
 };
 
 
+// get my  requests 
+const getMyAdoptedPetRequests = async (user:JwtPayload, status:AdoptionRequestStatus)=>{
+
+  let result = null;
+
+  if(status === AdoptionRequestStatus.APPROVED){
+    result = await prisma.adoptionRequest.findMany({
+      where:{
+        userId: user.id,
+        status: AdoptionRequestStatus.APPROVED
+      },
+      include:{
+        pet:true
+      }
+    });
+  }else{
+    result = await prisma.adoptionRequest.findMany({
+      where:{
+        userId: user.id,
+        status: {
+          not: AdoptionRequestStatus.APPROVED
+        }
+      }
+    });
+  }
+    
+    return result;
+}
+
+
 // update adoption request status
 const updateAdoptionStatus = async (
   status: AdoptionRequestStatus,
@@ -73,4 +103,5 @@ export const AdoptionServices = {
   submitAdoptionRequest,
   getAllRequests,
   updateAdoptionStatus,
+  getMyAdoptedPetRequests
 };

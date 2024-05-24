@@ -21,6 +21,8 @@ router.post(
 
 router.get("/adoption-requests", auth(USER_ROLE.ADMIN), AdoptionControllers.getAllRequests);
 
+router.get('/my-adoption-requests', auth(USER_ROLE.USER), AdoptionControllers.getMyAdoptedPetRequests)
+
 router.put(
   "/adoption-requests/:requestId",
   auth(USER_ROLE.ADMIN),
