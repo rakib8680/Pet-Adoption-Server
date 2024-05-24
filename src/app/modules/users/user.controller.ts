@@ -25,9 +25,8 @@ const registerUser = catchAsync(async (req, res) => {
 
 // get all users
 const getAllUsers = catchAsync(async (req, res) => {
-
   const filters = pick(req.query, userFilterableFields);
-  const options = pick(req.query, ["sortBy", "limit", "page", "sortOrder"])
+  const options = pick(req.query, ["sortBy", "limit", "page", "sortOrder"]);
 
   const result = await UserServices.getAllUsers(filters, options);
 
@@ -35,9 +34,10 @@ const getAllUsers = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: "Users retrieved successfully",
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
-})
+});
 
 
 
@@ -112,5 +112,5 @@ export const UserControllers = {
   updateMyProfile,
   getSingleUser,
   updateUser,
-  getAllUsers
+  getAllUsers,
 };
