@@ -1,7 +1,7 @@
 import { Request } from "express";
 import config from "../../config";
 import catchAsync from "../../utils/catchAsync"
-import jwt, { JwtPayload, Secret } from "jsonwebtoken"
+import { Secret } from "jsonwebtoken"
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
 import { verifyToken } from "../../utils/jwtHelpers";

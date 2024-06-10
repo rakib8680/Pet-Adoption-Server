@@ -23,7 +23,7 @@ router.get(
 );
 
 router.patch(
-  "/profile",
+  "/profile/update",
   auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   validateRequest(userValidations.updateUserValidationSchema),
   UserControllers.updateMyProfile

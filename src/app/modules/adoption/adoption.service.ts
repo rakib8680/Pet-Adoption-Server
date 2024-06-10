@@ -21,7 +21,6 @@ const submitAdoptionRequest = async (
     },
   });
 
-
   // check if the pet is already adopted
   const isAdopted = await prisma.adoptionRequest.findFirst({
     where: {
@@ -29,14 +28,10 @@ const submitAdoptionRequest = async (
       status: AdoptionRequestStatus.APPROVED,
     },
   });
-  if(isAdopted) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      "This pet is already adopted"
-    );
+  if (isAdopted) {
+    throw new AppError(httpStatus.BAD_REQUEST, "This pet is already adopted");
   }
 
-  
   // check if my request is already submitted
   const existingRequest = await prisma.adoptionRequest.findFirst({
     where: {
@@ -92,13 +87,24 @@ const getMyAdoptedPetRequests = async (
         pet: true,
       },
     });
+  } else if (status === AdoptionRequestStatus.REJECTED) {
+    result = await prisma.adoptionRequest.findMany({
+      where: {
+        userId: user.id,
+        status: AdoptionRequestStatus.REJECTED,
+      },
+      include: {
+        pet: true,
+      },
+    });
   } else {
     result = await prisma.adoptionRequest.findMany({
       where: {
         userId: user.id,
-        status: {
-          not: AdoptionRequestStatus.APPROVED,
-        },
+        status: AdoptionRequestStatus.PENDING,
+      },
+      include: {
+        pet: true,
       },
     });
   }
@@ -110,7 +116,6 @@ const getMyAdoptedPetRequests = async (
 
 // delete my adoption request
 const deleteMyAdoptionRequest = async (user: JwtPayload, id: string) => {
-
   // check if request exists
   const adoptionRequest = await prisma.adoptionRequest.findUniqueOrThrow({
     where: { id },
@@ -124,7 +129,7 @@ const deleteMyAdoptionRequest = async (user: JwtPayload, id: string) => {
     );
   }
 
-   await prisma.adoptionRequest.delete({
+  await prisma.adoptionRequest.delete({
     where: { id },
   });
 

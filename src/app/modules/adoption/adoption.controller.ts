@@ -13,8 +13,6 @@ const submitAdoptionRequest = catchAsync(
     const payload = req.body;
     const user = req.user;
 
-    console.log(payload);
-
     const result = await AdoptionServices.submitAdoptionRequest(payload, user);
 
     sendResponse(res, {
