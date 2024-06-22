@@ -63,7 +63,7 @@ const submitAdoptionRequest = async (
 
 // get all requests
 const getAllRequests = async () => {
-  const result = await prisma.adoptionRequest.findMany();
+  const result = await prisma.adoptionRequest.findMany({include:{pet:true, user:true}});
 
   return result;
 };

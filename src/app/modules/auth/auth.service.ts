@@ -74,7 +74,7 @@ const changePassword = async (
     userData.password
   );
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Incorrect password");
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Incorrect old password");
   }
 
 
