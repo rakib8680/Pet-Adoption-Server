@@ -4,9 +4,6 @@ import { petSearchableFields } from "./pet.constants";
 import { calculatePagination } from "../../../utils/calculatePagination";
 import { TPet } from "./pet.interface";
 
-
-
-
 // add a pet
 const addPet = async (payload: TPet) => {
   const result = await prisma.pet.create({
@@ -16,26 +13,23 @@ const addPet = async (payload: TPet) => {
   return result;
 };
 
-
-// delete a pet 
-const deletePet = async (id:string)=>{
-  
+// delete a pet
+const deletePet = async (id: string) => {
   // check if pet exists
   await prisma.pet.findUniqueOrThrow({
-    where:{
-      id
-    }
-  })
-
-   await prisma.pet.delete({
-    where:{
-      id
-    }
+    where: {
+      id,
+    },
   });
 
-  return {message:"Pet deleted successfully"};
-}
+  await prisma.pet.delete({
+    where: {
+      id,
+    },
+  });
 
+  return { message: "Pet deleted successfully" };
+};
 
 // get all pets
 const getAllPets = async (params: any, options: any) => {
@@ -46,8 +40,7 @@ const getAllPets = async (params: any, options: any) => {
   //Convert age to integer if it exists in filterableData
   if (filterableData.hasOwnProperty("age")) {
     filterableData["age"] = parseInt(filterableData["age"]);
-  };
-
+  }
 
   const andConditions: Prisma.PetWhereInput[] = [];
 
@@ -61,9 +54,7 @@ const getAllPets = async (params: any, options: any) => {
         },
       })),
     });
-  };
-
-
+  }
 
   //Solid filtering
   if (age) {
@@ -72,7 +63,7 @@ const getAllPets = async (params: any, options: any) => {
         equals: parseInt(age),
       },
     });
-  };
+  }
 
   if (Object.keys(filterableData).length > 0) {
     andConditions.push({
@@ -84,8 +75,8 @@ const getAllPets = async (params: any, options: any) => {
     });
   }
 
-
-  const whereConditions: Prisma.PetWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
+  const whereConditions: Prisma.PetWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
 
   // console.log(whereConditions.AND[0].OR);
 
@@ -99,8 +90,6 @@ const getAllPets = async (params: any, options: any) => {
     },
   });
 
-
-
   const total = result.length;
 
   return {
@@ -113,26 +102,19 @@ const getAllPets = async (params: any, options: any) => {
   };
 };
 
-
-
-// get single get 
-const getSinglePet = async(id:string)=>{
-
-  const result  = await prisma.pet.findUniqueOrThrow({
-    where:{
-      id
-    }
+// get single get
+const getSinglePet = async (id: string) => {
+  const result = await prisma.pet.findUniqueOrThrow({
+    where: {
+      id,
+    },
   });
 
-return result;
-
-}
-
-
+  return result;
+};
 
 // update pet
 const updatePet = async (id: string, payload: Partial<Pet>): Promise<Pet> => {
-    
   // check if pet exists
   await prisma.pet.findUniqueOrThrow({
     where: {
@@ -151,13 +133,10 @@ const updatePet = async (id: string, payload: Partial<Pet>): Promise<Pet> => {
   return result;
 };
 
-
-
-
 export const PetServices = {
   addPet,
   getAllPets,
   updatePet,
   getSinglePet,
-  deletePet
+  deletePet,
 };

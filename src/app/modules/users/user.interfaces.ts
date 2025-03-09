@@ -1,14 +1,10 @@
-
-
-
 export type TUserPayload = {
-    name: string;
-    email: string;
-    password: string;
+  name: string;
+  email: string;
+  password: string;
 };
 
-
 export type TLoginPayload = {
-    email: string;
-    password: string;
-}
+  email: string;
+  password: string;
+};

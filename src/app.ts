@@ -6,17 +6,15 @@ import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
 
-
-
 // middlewares and parsers
-app.use(cors({
-  origin: ['https://pet-adoption-alpha.vercel.app', '*'],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // application routes
 app.use("/api", router);
@@ -26,8 +24,6 @@ app.get("/", (req: Request, res: Response) => {
     message: "Pet Adoption 🐾",
   });
 });
-
-
 
 // global error handler
 app.use(globalErrorHandler);
