@@ -9,7 +9,7 @@ const app: Application = express();
 // middlewares and parsers
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://pet-adoption-alpha.vercel.app"],
     credentials: true,
   })
 );
