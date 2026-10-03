@@ -1,3 +1,8 @@
+import buffer from "buffer";
+if (!(buffer as any).SlowBuffer) {
+  (buffer as any).SlowBuffer = buffer.Buffer;
+}
+
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import router from "./app/routes";
@@ -9,8 +14,15 @@ const app: Application = express();
 // middlewares and parsers
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://pet-adoption-alpha.vercel.app"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://pet-adoption-alpha.vercel.app",
+      /https:\/\/.*\.vercel\.app$/,
+    ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());

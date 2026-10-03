@@ -1,3 +1,8 @@
+import buffer from "buffer";
+if (!(buffer as any).SlowBuffer) {
+  (buffer as any).SlowBuffer = buffer.Buffer;
+}
+
 import { Server } from "http";
 import app from "./app";
 
@@ -10,4 +15,5 @@ async function main() {
 }
 
 main();
-  
+
+export default app;
